@@ -25,13 +25,14 @@ public class CardRequestTest {
 
     @Test
 
-    public void shouldNotSubmitIfWrongName() {
+    public void shouldAlertIfNameFieldEmpty() {
         open("http://localhost:9999");
-        $("[data-test-id=name] input").sendKeys("John");
         $("[data-test-id=phone] input").sendKeys("+79999999999");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+        String expected = "Поле обязательно для заполнения";
+        String actual = $(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText();
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -48,24 +49,15 @@ public class CardRequestTest {
 
     @Test
 
-    public void shouldNotSubmitIfWrongPhoneNumber() {
+    public void shouldAlertIfPhoneNumberFieldIsEmpty() {
         open("http://localhost:9999");
         $("[data-test-id=name] input").sendKeys("Иван Иванов");
-        $("[data-test-id=phone] input").sendKeys("79999999999");
         $("[data-test-id=agreement]").click();
         $("button").click();
-        $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
-    }
+        String expected = "Поле обязательно для заполнения";
+        String actual = $(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText();
+        Assertions.assertEquals(expected, actual);
 
-    @Test
-
-    public void shouldNotSubmitIfWrongPhoneNumber2() {
-        open("http://localhost:9999");
-        $("[data-test-id=name] input").sendKeys("Иван Иванов");
-        $("[data-test-id=phone] input").sendKeys("+79999999");
-        $("[data-test-id=agreement]").click();
-        $("button").click();
-        $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
     }
 
     @Test
@@ -87,7 +79,7 @@ public class CardRequestTest {
         $("[data-test-id=name] input").sendKeys("Иван Иванов");
         $("[data-test-id=phone] input").sendKeys("+79999999999");
         $("button").click();
-        $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+        Assertions.assertTrue($(By.cssSelector("[data-test-id=agreement].input_invalid")).isDisplayed());
     }
 
 
